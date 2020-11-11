@@ -14,9 +14,11 @@ export class PostsService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
+  //http://nodeapi-env-1.eba-cgcjccap.us-west-2.elasticbeanstalk.com/api/posts
+
   getPosts() {
     this.http
-      .get<{ message: string; posts: any }>("http://nodeapi-env-1.eba-cgcjccap.us-west-2.elasticbeanstalk.com/api/posts")
+      .get<{ message: string; posts: any }>("http://192.168.0.2:4000/api/posts")
       .pipe(
         map(postData => {
           return postData.posts.map(post => {
@@ -42,7 +44,7 @@ export class PostsService {
 
   getPost(id: string) {
     return this.http.get<{ _id: string, title: string, content: string, imagePath: string }>(
-      "http://nodeapi-env-1.eba-cgcjccap.us-west-2.elasticbeanstalk.com/api/posts/" + id
+      "http://192.168.0.2:4000/api/posts/" + id
     );
   }
 
@@ -54,13 +56,13 @@ export class PostsService {
         name: name, 
         breed: breed, 
        
-        rates: rates + 1, 
+        rates: rates, 
         image: image
 
     }
    
     
-    this.http.put("http://nodeapi-env-1.eba-cgcjccap.us-west-2.elasticbeanstalk.com/api/rate/" + id, pupData)
+    this.http.put("http://192.168.0.2:4000/api/rate/" + id, pupData)
     
     .subscribe(response=>{
       console.log(response)
@@ -71,7 +73,7 @@ export class PostsService {
 
 
 getP(){
-  this.http.get<{message:string, posts:any}>("http://nodeapi-env-1.eba-cgcjccap.us-west-2.elasticbeanstalk.com/api/rate")
+  this.http.get<{message:string, posts:any}>("http://192.168.0.2:4000/api/rate")
   .pipe(map((postData)=>{
       
       return postData.posts.map(post=>{
@@ -106,7 +108,7 @@ getP(){
     postData.append("image", image, title);
     this.http
       .post<{ message: string; post: Post }>(
-        "http://nodeapi-env-1.eba-cgcjccap.us-west-2.elasticbeanstalk.com/api/posts",
+        "http://192.168.0.2:4000/api/posts",
         postData
       )
       .subscribe(responseData => {
@@ -128,7 +130,7 @@ getP(){
 
   deletePost(postId: string) {
     this.http
-      .delete("http://nodeapi-env-1.eba-cgcjccap.us-west-2.elasticbeanstalk.com/api/posts/" + postId)
+      .delete("http://192.168.0.2:4000/api/posts/" + postId)
       .subscribe(() => {
         const updatedPosts = this.posts.filter(post => post.id !== postId);
         this.posts = updatedPosts;
